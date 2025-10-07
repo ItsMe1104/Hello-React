@@ -11,6 +11,8 @@ x > 10                     // → true or false
 [1, 2, 3].map(n => n * 2)  // → [2, 4, 6]
 isLoggedIn ? "Hi" : "Bye"  // → "Hi" or "Bye"
 sayHi()                    // function call returns a value
+var_abc                   // variable reference
+// () => { };              // arrow function
 
 
 //*********************** */
@@ -25,6 +27,13 @@ for (let i = 0; i < 10; i++) { }    // ❌ statement
 function sayHi() { }                // ❌ statement
 let num = 10;                       // ❌ declaration
 
+
+//?? Note :-
+// --> function declaration is not an expression
+// --> But when we assign it to some variable this declaration becomes an expression
+
+const func = function () { return 2; }
+// --> But as a whole, variable declaration is not JS expression
 
 
 //********************************************************************************************************************************************************************************************************************************************************************************************************************************* */
@@ -59,8 +68,8 @@ const result = true ? "Yes" : "No";  // works!
 
 //?? 3) JSX and JS expressions :-
 
-// --> In React JSX, we can only embed JS expressions inside {...} to get some dynamic value
-// --> Inside { ... }, JSX expects any valid JS expression.
+// --> In React JSX, we can only embed JS expressions, literals, variable reference to get some dynamic value
+// --> Inside { ... }, JSX expects any valid JS expression, literals or variable reference.
 
 
 //? e.g 1 (dynamic calculation inside jsx):-
