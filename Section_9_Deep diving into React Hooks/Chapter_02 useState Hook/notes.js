@@ -292,4 +292,30 @@ setCount((prevState) => prevState + 1);
 
 //?? Behind the scenes :-
 // --> We are not directly giving React a new value
-// -->
+// --> We are giving React a function to calculate the new value, based on the latest version of the state
+
+//? Step 1 :-
+// --> React doesn’t run the function immediately.
+// --> It stores these updates in an internal queue, something like this :-
+
+[
+  prev => prev + 1,
+  prev => prev + 1,
+  prev => prev + 1,
+  prev => prev + 1
+]
+
+// --> Using prevState, it is specified that whenever the RHS is calculated, LHS should be updated
+
+//? Step 2 :-
+// --> Later (before rendering again), React goes through the queue in order.
+// --> It starts with the current state = 0
+
+// prev = 0  → prev + 1 = 1
+// prev = 1  → prev + 1 = 2
+// prev = 2  → prev + 1 = 3
+// prev = 3  → prev + 1 = 4
+
+//?? Step 3 :-
+// React updates its internal state object with the final value
+// --> On re-render, it updates the value of the state variable as 4
