@@ -217,3 +217,8 @@ const notes4 = () => {
     </>
   )
 }
+
+
+//?? NOTE :-
+// --> Do not pass the State variable array inside the dependency list
+// --> Else again infinite re-renders and calls will take place
