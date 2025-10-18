@@ -58,6 +58,7 @@ useEffect(() => {
 
 
 // ?? When does useEffect runs?
+// --> useEffect() always runs after the component is rendered.
 // --> useEffect() always runs on first render anyhow.
 // --> i.e after the commit phase of React, when the DOM is ready.
 
@@ -164,10 +165,15 @@ const App = () => {
 
 //?? Unmounting phase :-
 // --> i.e when the component is removed from the UI
-// e.g :- component gets deleted or component gets swapped with other component during routing
 
-// --> If we want some function to run after the unmounting phase
-// --> We can do that using useEffect
+// e.g :- 
+// --> component gets deleted 
+// --> component gets swapped with other component during routing
+
+
+//?? Running Some function after component unmounted
+// --> We can run some function after the unmounting phase using useEffect()
+
 
 
 //?? How useEffects execute a function after unmounting?
@@ -217,8 +223,31 @@ const notes = () => {
   )
 }
 
+//********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************** */
 
 
+//?? 6) Some facts about useEffect() :-
 
+//?? 1) Fact 1 :-
+// --> React works on the virtual DOM
+// --> It does not allow us to touch real DOM
+// --> But using useEffect() and useLayoutEffect()
+// --> We can manipulate the Real DOM upto some extent (Not recommended)
+
+
+// e.g :-
+const App1 = () => {
+
+  useEffect(() => {
+    const h1 = document.querySelector("hello")
+    h1.style.backgroundColor = 'red'
+  }, [])
+
+  return (
+    <>
+      <h1 id="hello" ></h1>
+    </>
+  )
+}
 
 

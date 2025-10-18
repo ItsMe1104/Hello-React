@@ -168,14 +168,30 @@ const notes3 = () => {
 //?? Reason :-
 // --> Since useEffect() is used without dependency array
 // --> It will be called after every render
-// --> Again, after every render, new API call will be called
-// --> Again set() from newAPI will be called
-// --> Again component will re-render and so on.
+
+
+// --> Same literal values have same reference
+// --> But arrays/object with same content have different reference in JS
+// --> Hence, here our State variable array is getting updated with a new reference array from API call on each render 
+
+
+// a) On first render: req_data = []
+// b) useEffect runs → fetch starts.
+// c) the State variable with new data(not[] anymore)
+
+// Re-render happens
+
+// d) next render, useEffect runs again → triggers another fetch.
+// e) Fetch returns a new data object (even if identical in content).
+// f) React sees new reference in memory (new Array) → different from previous → triggers another render 
+
+
+//* This cycle continues with infinite re-renders and infinite API calls
 
 
 //? useEffect(new API Call) -> set() -> component re-render -> useEffect(new API call) -> set() -> component re-render ...
 
-// --> This cycle continues with infinite re-renders and infinite API calls
+
 
 
 //?? Solution :-
@@ -198,7 +214,7 @@ const notes4 = () => {
 
   // calling API inside useEffect
   useEffect(() => {
-    fetch("API")
+    fetch("API call")
       .then((res) => { return resizeBy.json() })
       .then((data) => {
         setReq_data(data);
@@ -222,3 +238,20 @@ const notes4 = () => {
 //?? NOTE :-
 // --> Do not pass the State variable array inside the dependency list
 // --> Else again infinite re-renders and calls will take place
+
+
+//?? Why?
+// --> Since we are updating State variable with an array
+// --> And every array has different reference
+// --> Hence, React cannot make out if the old State variable like-equal to new updated variable
+// --> Hence, it cannot stop the re-render
+
+// --> & on every render for the State variable array
+// --> useEffect() will run and update the State variable array again with new reference array from API call
+// --> Leading to re-render again
+
+
+//?? Concept :-
+// --> Be careful while updating State variables with
+// --> Literal values or objects/ arrays inside useEffect()
+// --> Always use empty dependency array in these cases
