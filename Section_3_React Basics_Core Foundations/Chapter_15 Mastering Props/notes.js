@@ -5,7 +5,7 @@
 // --> It can only be sent from parent -> child but not vice versa
 
 
-//? React props can be of any data type including object, arrays, etc
+//? React props can be of any data type including object, arrays, functions, etc
 
 
 //?? How to pass the data from parent to child?
@@ -174,7 +174,7 @@ const note3 = () => {
 //?? 6) Some rules about props :-
 
 // --> Although State in React is mutable in nature
-// --> Props should be immutable in nature accoridng to best practice
+// --> Props should be immutable in nature according to best practice
 // --> Though we can update or change them in our child component but its not a good practice
 
 // e.g :-
@@ -215,13 +215,8 @@ const Card5 = ({ name = "Default name", city }) => {
 // --> if the "name" attribute is nor passed from parent
 
 
-//**************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************** */
+//**************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************** *
 
 
-//?? 7) BONUS :- JSX to Vanilla JS :-
-
-// --> Browsers doesn't understand modern JS syntax
-// --> Browsers only understand vanilla JS
-
-// --> Babel transpile the JSX into a particular modern JS syntax at least if not vanilla JS
-// --> But still to convert it into Vanilla JS, bundlers like web pack or parcel will do it while bundling.
+//?? 7) Passing functions as props
+// --> In notes2.js
