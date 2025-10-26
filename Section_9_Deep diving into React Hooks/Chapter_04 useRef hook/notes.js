@@ -1,7 +1,5 @@
 //?? 1) useRef() hook :-
 
-import { useEffect, useRef } from "react"
-
 //?? Syntax :-
 // useRef(a)
 // --> It returns an object

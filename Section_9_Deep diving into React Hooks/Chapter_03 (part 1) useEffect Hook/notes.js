@@ -1,6 +1,5 @@
 //?? 1) useEffect() Hook :-
 
-import { useEffect } from "react";
 
 // --> It allow us to perform side effects in your components
 

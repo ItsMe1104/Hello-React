@@ -1,7 +1,5 @@
 //?? 1) Difference between functions and hooks :-
 
-import { forwardRef, useState } from "react";
-
 //? Functions :-
 // --> A function is just a normal JavaScript function.
 // --> In React we also have functional components, that return some jsx.

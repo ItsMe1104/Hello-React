@@ -1,6 +1,5 @@
 //?? 1) useLayoutEffect() vs useEffect() :-
 
-const { useLayoutEffect, useEffect } = require("react");
 
 //? When is useEffect() run for first time?
 // --> It is always called after the component is rendered on UI

@@ -1,7 +1,5 @@
 //?? 1) useState() Hook in React :-
 
-import { useState } from "react";
-
 // --> It helps us to create State variables in the component
 // --> State variables are those which are always tracked by React and on updation lead to component re-render
 
