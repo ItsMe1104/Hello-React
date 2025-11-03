@@ -129,10 +129,62 @@ const App2 = () => {
 
 //?? 3) Custom useContext() for Consumer :-
 
-// --> In the consumers :-
+// --> Earlier in the consumers :-
 // --> We directly used the useContext() hook and passed the required Context to get the State
 // --> Here we will create the custom useContext() hooks for separate Contexts
 
 
+//?? Steps :-
+
+//? a) Creating the custom hook
 // --> Inside the file where we created that context
-// --> Create a custom hook
+// --> Create a custom hook with name starting with "use"
+// --> export it
+
+export const useThemeDetails = () => {
+
+}
+
+
+
+//? b) using useContext() hook inside our custom hook
+//==> Extract the State from the Context using useContext() inside our custom Hook
+//==> This State will come from the "value" attribute in our <Context.Provider> tag
+//==> Pass the required created context inside the useContext from which we want the State
+
+export const useThemeDetails1 = () => {
+  const themeContext = useContext(ThemeContext);
+}
+
+
+
+//? c) using conditionals for throwing Error
+// --> If we find no State or data inside the variable that we got from useContext()
+// --> Throw an error asking the State/data to be passed from the Provider component
+// --> Else return whatever State/data we got from useContext()
+
+export const useThemeDetails2 = () => {
+  const themeContext = useContext(ThemeContext);
+
+  if (!themeContext) {
+    throw new Error("Please pass data from the Provider component")
+  }
+  else {
+    return themeContext;
+  }
+}
+
+
+//? d) Getting data from the custom Hook in Consumer
+// --> Inside the Consumer
+// --> Export the custom hook that we created
+// --> Call the custom hook and store in a variable
+// --> Extract the State, required data from that variable on the fly
+
+const req_details = useThemeDetails();
+console.log(req_details.name);
+console.log(req_details.setName);
+
+// or
+
+const { name, setName } = useThemeDetails()

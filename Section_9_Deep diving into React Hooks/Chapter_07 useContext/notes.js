@@ -65,6 +65,7 @@
 // b) Create a js context file (as we won't return any jsx)
 // --> e.g :- UserContext.js, ThemeContext.js, etc
 
+
 // c) Creating the context
 // --> import the createContext method from react package as named import
 
@@ -80,6 +81,15 @@ const ThemeContext = createContext();
 // --> export it so that it can be used by Producer and Consumer
 
 export const UserContext1 = createContext();
+
+
+
+//?? What does createContext() return?
+// --> It returns an object with two main properties
+// --> These properties are itself React components
+
+// a) Provider
+// b) Consumer (not majorly used in functional components, instead we use useContext())
 
 
 //************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************* */
@@ -212,8 +222,6 @@ console.log(name);
 //? NOTE :-
 // --> If multiple components consume the same context state, they always stay synchronized
 // --> Changing the value of State in one, will automatically change in the other component also
-
-
 
 
 
