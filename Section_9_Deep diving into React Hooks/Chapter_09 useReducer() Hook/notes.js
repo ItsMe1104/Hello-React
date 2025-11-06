@@ -188,7 +188,7 @@ const App = () => {
 
 //********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************** */
 
-//?? dispatch() returned by useReducer() :-
+//?? 6) dispatch() returned by useReducer() :-
 
 // --> The function call that is used to send(action) to reducer
 
@@ -208,6 +208,9 @@ const App = () => {
 // --> Whenever we want to define some action on our variable on the happening of some event
 // --> Most commonly used inside the callback of Event Handlers in React.
 
+//?? NOTE :-
+//--> It is a function call and not a callback function
+//--> Hence don't directly pass it inside the event Handler
 
 // e.g :-
 
@@ -226,10 +229,108 @@ const App2 = () => {
       <button onClick={() => {
         dispatch({ type: "decrement" })
       }}>Decrement</button>
+
+      <button onClick={() => {
+        dispatch({ type: "reset" })
+      }}>Reset</button>
     </>
   )
 }
 
 
+//********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************** */
 
+//?? 7) reducer we passed as argument to useReducer() :-
+
+//--> The function that decides how state updates based on the type action type we dispatch
+
+//--> Whatever value it returns will become the updated value of State
+
+
+//?? Where to define the reducer function :-
+// --> In redux, we define it in a separate file
+// --> In small apps, while using useReducer(), we define it in the same component file where we use useReducer()
+// --> But outside the component
+
+
+
+//?? Syntax :-
+//? i) It takes two arguments :-
+// a) state = current value of State 
+// b) action = type of action passed from dispatch()
+
+
+//? ii) Inside we use a switch case to decide what updated state value is returned on a particular action
+// --> Always return the same state in default value
+
+
+//? iii) Its return value becomes the updated value of the State 
+// --> In case of object as a State, always return a new object
+// --> Then only React will re-render the component like in useState() 
+
+
+function reducer(state, action) {
+  switch (action.type) {
+    case "increment":
+      return { count: state.count + 1 }
+
+    case "decrement":
+      return { count: state.count + 1 }
+
+    case "reset":
+      return { count: state.count + 1 }
+
+    default:
+      return state;
+  }
+}
+
+
+//************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************** */
+
+//?? 8) How useReducer() updates the UI?
+
+// --> When the dispatch() is called
+// --> React calls the reducer function
+// --> React re-renders the component when a new updated state is returned from reducer function
+
+
+//?? Whole code :-
+
+function reducer(state, action) {
+  switch (action.type) {
+    case "increment":
+      return { count: state.count + 1 }
+    case "decrement":
+      return { count: state.count - 1 }
+    case "reset":
+      return { count: 0 }
+    default:
+      return state;
+  }
+
+}
+
+const App3 = () => {
+  const initialState = { count: 0 };
+
+  const [state, dispatch] = useReducer(reducer, initialState);
+
+  return (
+    <div>
+      <h1>{state.count}</h1>
+      <button onClick={() => {
+        dispatch({ type: "increment" })
+      }}>Increment</button>
+      <hr />
+      <button onClick={() => {
+        dispatch({ type: "decrement" })
+      }}>Decrement</button>
+      <hr />
+      <button onClick={() => {
+        dispatch({ type: "reset" })
+      }}>Reset</button>
+    </div >
+  )
+}
 
