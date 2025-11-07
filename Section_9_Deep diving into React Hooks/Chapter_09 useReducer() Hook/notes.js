@@ -195,13 +195,17 @@ const App = () => {
 //?? What is an action that we send from dispatch?
 // --> It is a JS object
 // --> It tells the reducer what change to make in state
-// --> It has two main properties :-
+// --> Here we define the properties :-
 
-// a) type :-
+// a) type (industry standard):-
 // --> The value for this property is the name of action (as String) we are performing on the variable
 
 // b) payload :-
 // --> Not used much
+
+//?? NOTE :-
+// --> User-defined properties can also be sent
+
 
 
 //?? When is dispatch() called?
