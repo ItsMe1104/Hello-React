@@ -1,4 +1,4 @@
-//?? 1) Memoization :-
+//?? 1) Memoization in React:-
 
-// --> It is a performance optimization technique
-// --> Here we store the result of expensive function calls
+// --> To memoize a value, we use useMemo()
+// --> To memoize a function, we use useCallback()
