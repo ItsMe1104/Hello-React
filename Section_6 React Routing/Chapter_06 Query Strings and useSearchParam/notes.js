@@ -36,6 +36,10 @@ const [a, b] = useSearchParams();
 //?? Its syntax is same as useState()
 
 
+//?? NOTE :-
+// --> Whenever we set the query parameters
+// --> React re-renders the component
+
 //********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************* */
 
 //?? 3) Reading query params :-
@@ -126,7 +130,81 @@ const App2 = () => {
 
 //********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************* */
 
-//?? 5) Nullish coalescing operator (??) :-
+
+//?? 5) How to preserve other parameters while setting a new one?
+
+//--> While setting the new object in set()
+//--> We need to merge it with the old object 
+//--> such that only the new key-value pair is added or updated, rest remain the same
+//--> Use the spread operator 
+
+
+//?? About searchParams object returned by useSearchParams():-
+// --> React router creates a special built in object called searchParams
+// --> It is an instance of URLSearchParams
+// --> It internally stores all the key-value pairs in an array but hidden ( cannot see in console.log)
+// --> To extract we have to use get() or entries()
+
+
+//?? entries()
+// --> It returns a special Iterator Object with all key-value pairs from array
+// --> It can be iterated using for-of loop
+
+// e.g :-
+const fruits = ["Banana", "Orange", "Apple"];
+
+for (let x of fruits.entries()) {
+  console.log(x)
+}
+
+//?? Output
+// [0, 'Banana']
+// [1, 'Orange']
+// [2, 'Apple']
+
+//?? NOTE :-
+// --> It also somewhat stores these mini arrays inside an array only
+
+
+//*************************** */
+
+
+//?? Object.fromEntries()
+// --> creates an object from a list of key/value pairs.
+
+const fruits2 = [
+  ["apples", 300],
+  ["pears", 900],
+  ["bananas", 500]
+];
+
+const myObj = Object.fromEntries(fruits2);
+console.log(myObj);
+
+// Output :-
+// { apples: 300, pears: 900, bananas: 500 }
+
+
+//?? Hence, the 2D array we received from entries() can be converted to an object of key-value pairs
+// --> Using Object.fromEntries()
+
+
+//To save the old object
+const current = Object.entries(searchParams.entries());
+
+
+//************************ */
+
+
+//?? Final Solution :-
+const current2 = Object.entries(searchParams.entries());
+setSearchParams({ ...current2, new_Key: newValue })
+
+
+//********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************* */
+
+
+//?? 6) Nullish coalescing operator (??) :-
 
 // --> It is used to provide a default value only when the left side is null or undefined
 // --> It can be used as a shortcut in place of ternary operator
