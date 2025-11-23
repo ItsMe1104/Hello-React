@@ -157,7 +157,7 @@ const App = () => {
   // useEffect 4
   useEffect(() => {
     return () => {
-      console.log("Runs on umounting");
+      console.log("Runs on unmounting");
     }
   })
 
