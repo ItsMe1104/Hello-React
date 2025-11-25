@@ -224,6 +224,11 @@ useEffect(() => {
 // --> That Error object received as argument will have a property as "message"
 // --> We can display it on UI
 
+//?? Syntax :-
+// .catch(a)
+// a = callback function
+
+
 //?? Rules of using catch()
 // --> There can be multiple then() but only 1 catch() in an optional chaining
 // --> Attach the catch() at last of all the then() are in the chain
@@ -243,5 +248,39 @@ fetch('/api/users')
 
 //?? 6) Rules about throwing Error :-
 
-// --> fetch() rejects only if there is a network failure (no internet, DNS error, CORS blocked, aborted).
+// --> fetch() only rejects if there is a network failure (no internet, DNS error, CORS blocked, aborted).
 // --> Even if server returns 404 / 500, fetch() still resolves.
+
+// --> Hence, .catch() doesn't handle all errors
+
+//?? Solution :-
+//--> Always check error using "ok" property of response object inside first .then()
+//--> Throw a manual Error using new & print "status" property
+
+//?? Whatever we send from Error() object
+// --> will be received inside the message property of the Error object
+// --> We can print it in catch()
+
+
+fetch("ENDPOINT")
+  .then((res) => {
+    if (res.ok) {
+      throw new Error("HTTP Error : " + res.status);
+    }
+    return res.json();
+  })
+  .then((data) => {
+    console.log(data);
+  })
+  .catch(() => {
+    console.log("ERROR Message :- ", err.message);
+  })
+
+
+
+
+
+//**************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************** */
+
+
+
