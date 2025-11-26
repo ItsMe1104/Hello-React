@@ -184,9 +184,15 @@ useEffect(() => {
 
 //?? Solution :-
 // --> Instead of rendering Loader inside React fragment
-// --> Make the component render the Loader component as a whole if the Loader State is true
+// --> Add a if-condition before return & return the Loader component if Loader State is true
+
+if (isLoading === true)
+  return <Loader />
+
+return (<>...</>)
+
 // --> If the Loader State is false, means data received
-// --> Then render all the parts of the component inside the React Fragment  (<></>)
+// --> Hence, if-condition will fail & component can render all its stuff through its initial return
 
 
 // Whole code :-
@@ -223,4 +229,35 @@ const App1 = () => {
   )
 }
 
+//********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************* */
 
+//?? 4) How to set up an animated Loader :-
+
+//? Prerequisites :-
+// --> Create a directory inside component named "common"
+// --> As this Loader will be common for all components
+// --> Create a Loader.jsx file Loader.css file
+// --> Import the Loader.css file in Loader.jsx
+
+//? Adding CSS and HTML
+// --> Go to Loading.io/css
+// --> Choose your desired Loader
+// --> Click and paste the CSS code for the desired Loader in Loader.css file
+// --> Paste the html code inside our component's JSX
+
+
+//? Using Loader
+// --> In whichever component we were rendering our man-made Loader
+// --> Replace it with the Animated Loader component
+
+
+//********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************* */
+
+//?? 5) How to change out Internet speed in Browser :-
+
+// --> To check if our Loader is working or not
+// --> Run our app
+// --> Go to Dev tools
+// --> Performance Tab (Beside Console & Network)
+// --> There is a input field beside wifi icon
+// --> Change it to 3G (no throttling means net speed is up to mark)
