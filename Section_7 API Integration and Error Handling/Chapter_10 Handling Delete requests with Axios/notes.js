@@ -32,7 +32,7 @@
   <table>
     <tbody>
       {
-        users.map((user) => {
+        users?.map((user) => {
           return <tr key={user.id}>
             <td><p key={user.id}>{user.name}</p></td>
             <td><button onClick={deleteUser(user.id)}>Delete</button></td>

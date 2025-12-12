@@ -102,7 +102,7 @@ const App = () => {
     <>
       {isLoading && <Loader />}
       <ul>{
-        data.map((item) => {
+        data?.map((item) => {
           return <li key={item.id}>{item.name}</li>
         })
       }</ul>
@@ -221,7 +221,7 @@ const App1 = () => {
     <>
       {/* {isLoading && <Loader />} */}
       <ul>{
-        data.map((item) => {
+        data?.map((item) => {
           return <li key={item.id}>{item.name}</li>
         })
       }</ul>

@@ -21,6 +21,28 @@
 // --> Making the API call on 1st render only
 // --> We have to update the State inside .then() only
 
+
+//?? NOTE (optional chaining) :-
+// --> Always use optional chaining (?) while displaying the API data using map()
+// --> Though it is required only when we defined the initial State of data to be null or undefined
+// --> It will work fine if the initial state of data is declared as []
+// --> But still it is good practice to have optional chaining
+
+// e.g :-
+data?.map(() => {
+
+})
+
+
+//?? Why Optional Chaining Required?
+// --> Because in the first render, data will be undefined (since the initial State is undefined) 
+// --> hence we cannot use map() on it
+// --> Only on the re-render, the state, will be updated with the API data 
+
+
+
+// Whole Code :-
+
 const App = () => {
 
   const [data1, setData1] = useState([])
@@ -39,7 +61,7 @@ const App = () => {
     <>
       <h1>Users :-</h1>
       <ul>
-        {data1.map((user) => {
+        {data1?.map((user) => {
           return <li key={user.id}>{user.name}</li>
         })}
       </ul>

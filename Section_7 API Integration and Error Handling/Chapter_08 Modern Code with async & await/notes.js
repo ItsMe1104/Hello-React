@@ -135,7 +135,7 @@ const App = () => {
       {isLoading && <Loader />}
       {error && <em>{error}</em>}
       <ul>{
-        data.map((item) => {
+        data?.map((item) => {
           return <li key={item.id}>{item.name}</li>
         })
       }</ul>
