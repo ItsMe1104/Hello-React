@@ -107,12 +107,17 @@
 // --> Store the selected option's attached "value" in a State
 // --> Initialize the State as null
 
+
+//?? NOTE :-
+// --> e.target.value will give a string 
+// --> Convert it to number using Number()
+
 {
   const [userId, setUserId] = useState(null)
 
   {
     <select onChange={(e) => {
-      setUserId(e.target.value)
+      setUserId(Number(e.target.value))
     }}>
       <option value={null}> Select </option>
       <option value="1"> User 1 </option>
@@ -125,6 +130,36 @@
 }
 
 
+
+
 //******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************* */
 
 
+//?? 3) Creating custom hook to call our API :-
+
+
+//?? Step 1 :-
+// --> Create the hook (useTodos) which will use React query to fetch the data based on the the value that we got from <select> tag
+// --> Pass that target value as argument to our custom hook
+// --> So that we can build the URL accordingly
+
+
+// In main file calling the custom hook
+
+
+
+
+// In custom hook.js
+const useTodos = (userId) => {
+
+  return useQuery({
+    queryKey: ["users"],
+    queryFn: async () => {
+      const res = await axios.get(`URL`)
+    }
+  })
+}
+
+
+
+//?? Step 2 :-
