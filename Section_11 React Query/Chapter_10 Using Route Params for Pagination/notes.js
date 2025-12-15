@@ -55,7 +55,7 @@
 
 //?? Step 3 :-
 // --> To store a value attached to an option
-// --> use the "value" attribute
+// --> use the "value" attribute 
 // --> Here the value attached will work as userId for route param
 
 {
@@ -87,7 +87,7 @@
 // --> Hence, extract the value attached to selected option using e.target.value
 
 {
-  <select onChange={(e) => {
+  <select value={userId} onChange={(e) => {
     console.log(e.target.value);
   }}>
     <option value={null}> Select </option>
@@ -97,6 +97,10 @@
     <option value="4"> User 4 </option>
   </select>
 }
+
+//?? NOTE (controlled for <select>) :-
+// --> Its very important to pass the value attribute inside <select> and link it with the State
+// --> So that it becomes a controlled component
 
 
 //******************************** */
@@ -116,7 +120,7 @@
   const [userId, setUserId] = useState(null)
 
   {
-    <select onChange={(e) => {
+    <select value={userId} onChange={(e) => {
       setUserId(Number(e.target.value))
     }}>
       <option value={null}> Select </option>
@@ -129,7 +133,7 @@
 
 }
 
-
+// --> The State variable will be passed to our custom hook for useQuery
 
 
 //******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************* */
@@ -139,27 +143,190 @@
 
 
 //?? Step 1 :-
-// --> Create the hook (useTodos) which will use React query to fetch the data based on the the value that we got from <select> tag
+// --> Create the hook (useTodos) will use React query 
+// --> It will fetch the data based on the value we got from <select>
 // --> Pass that target value as argument to our custom hook
 // --> So that we can build the URL accordingly
 
 
 // In main file calling the custom hook
-
-
-
+const { data: todos, isLoading, error } = useTodos(userId);
 
 // In custom hook.js
 const useTodos = (userId) => {
 
   return useQuery({
-    queryKey: ["users"],
-    queryFn: async () => {
-      const res = await axios.get(`URL`)
-    }
+    queryKey,
+    queryFn
   })
 }
 
 
+//************************** */
 
-//?? Step 2 :-
+
+//?? Step 2 (Adjusting queryKey):-
+// --> Since, we will have different API calls for different userId
+// --> We need to make different queryKeys for different API calls in the cache
+
+//?? Best way to make different queryKeys :-
+// --> Pass an array to the queryKey
+// --> For 1st element, pass any name as string related to URL before queryParameter (e.g users)
+// --> For 2nd element, pass the State variable we got from <select>
+// --> For 3rd element, pass any name as string related to URL after queryParameter (e.g todos)
+// --> This combination can make a unique key
+
+//? e.g :-
+// users/1/todos
+["users", userId, "todos"]
+
+//? e.g :-
+// users/1
+["users", userId]
+
+
+
+//?? NOTE :-
+// --> Don't only pass the State variable (although correct)
+// --> As it can lead to having same keys, if we are other types of API requests from same URL
+
+//?? Benefit :-
+// --> Whenever the State changes, React re-renders
+// --> React Query will check if the cache has a key corresponding to the new State value
+// i) If Not, it will make a new request from new URL based on new State variable
+// ii) If yes, it will get the data from cache
+
+{
+  const useTodos = (userId) => {
+
+    return useQuery({
+      queryKey: userId ? ["users", userId, "todos"] : ["todos"],
+      queryFn
+    })
+  }
+}
+
+// --> means if userId is null or undefined (WHen the option is "select")
+// --> then only save as "todos" in cache
+
+//?? Better way is to use "enabled" property (Step 4), so that the API call is itself not made in case of "null" or "undefined"
+
+
+//************************** */
+
+
+//?? Step 3 (using queryParameter in URL):-
+
+// --> Use String Interpolation to attach the received State Variable as query parameter in our URL
+// --> Make the API call
+
+{
+  const useTodos = (userId) => {
+
+    return useQuery({
+      queryKey: ["users", userId, "todos"],
+      queryFn: async () => {
+        const res = await axios.get(`https://jsonplaceholder.typicode.com/users/${userId}/todos`);
+        return res.data;
+      }
+    })
+  }
+}
+
+
+//?? NOTE :-
+// --> If instead of query Parameter, it was queryString
+//? e.g :-
+//  https://jsonplaceholder.typicode.com/users/todos?userId=1
+// (userId=1 is a queryString)
+
+//! Solutions :-
+// --> Every thing remains same, only axios URL will change
+// --> Before the "?", we will provide as URL
+// --> We will provide an object as a second argument in axios.get() or post(), etc
+// --> Then inside the object, we will pass a property "params"
+// --> It will take an object as value
+// --> Inside that object, pass all the inputs for query Parameters
+
+{
+  params: {
+    a, b, c            // a=1 & b=5 & c=3
+  }
+}
+
+
+// Total example :-
+{
+  const useTodos = (userId) => {
+
+    return useQuery({
+      queryKey: ["users", userId, "todos"],
+      queryFn: async () => {
+        const res = await axios.get(`https://jsonplaceholder.typicode.com/users/todos`, {
+          params: {
+            userId
+          }
+        });
+        return res.data;
+      }
+    })
+  }
+}
+
+
+
+//************************** */
+
+
+//?? Step 4 (Making API calls only when State is not null or undefined):-
+
+// --> use the "enabled" property in useQuery()
+// --> It will make the API call only when some condition is satisfied 
+
+enabled: userId !== null && userId !== undefined;
+
+
+// e.g :-
+{
+  const useTodos = (userId) => {
+
+    return useQuery({
+      queryKey: ["todos", userId],
+      queryFn: async () => {
+        const res = await axios.get(`https://jsonplaceholder.typicode.com/users/${userId}/todos`);
+        return res.data;
+      },
+      enabled: !!userId
+    })
+  }
+}
+
+
+
+//****************************** */
+
+//?? Optimization :-
+// --> Directly pass the queryKey inside queryFn
+// --> Then extract userId from it and use it in the URL
+// --> So that queryFn depends on queryKey and not closure variables
+
+{
+  const useTodos = (userId) => {
+
+    return useQuery({
+      queryKey: ["todos", userId],
+      queryFn: async (queryKey) => {
+        const [, userId] = queryKey;
+        const res = await axios.get(`https://jsonplaceholder.typicode.com/users/${userId}/todos`);
+        return res.data;
+      },
+      enabled: !!userId
+    })
+  }
+}
+
+
+//*********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************** */
+
+//?? BONUS :-
+// --> See the controlled and uncontrolled components in the next notes2.js
