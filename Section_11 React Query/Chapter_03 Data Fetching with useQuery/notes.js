@@ -16,9 +16,8 @@
 
 const { a } = useQuery(b)
 
-// a = returned data from the API call
+// a = State variable containing returned API data
 // b = object that contains the queryKey, queryFn as properties
-
 
 
 //?? object argument we pass in useQuery :-
@@ -134,6 +133,43 @@ useQuery({ queryKey: [], queryFn: () => Promise })
 
 //?? NOTE :-
 // --> The initial value for State variable for loading the data is "undefined"
+
+
+//?? Solution 1 (Use default Value as empty array for API data)
+// --> Always set the default value of the API data received as empty array []
+// --> We can do it while destructuring
+
+{
+  const { data = [], isLoading, error } = useQuery({
+    queryKey: ["users"],
+    queryFn: async () => {
+      const res = await axios.get("URL")
+      return res.data;
+    }
+  })
+}
+
+// OR (while using different names)
+
+{
+  const { data: users = [], isLoading, error } = useQuery({
+    queryKey: ["users"],
+    queryFn: async () => {
+      const res = await axios.get("URL")
+      return res.data;
+    }
+  })
+}
+
+//?? NOTE :-
+// --> Everything that we destructure are inbuilt State variables of React Query
+// --> Hence, we don't need to create State variables separately for updating it with API data
+
+
+//************************************** */
+
+
+//?? Solution 2 (Use Optional Chaining):-
 // --> Hence, always use Optional Chaining (?) while using map() on it
 
 
