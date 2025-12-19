@@ -176,10 +176,21 @@ products.length > 0 && <div className="pagination"></div>
 // --> Add the onClick handlers to every generated button
 // --> Such that when clicked, we will change the page State to that button's no.   (index+1)
 
+//? NOTE:-
+// --> Make sure that the page is updated only when the button we are clicking != current page
+// --> Hence, there is no point of rendering again
 
+if (page !== idx + 1)
+  setPage(idx + 1);
+
+// E.g :-
 {
   [...Array(Math.ceil(products.length / 10))].map((item, idx) => {
-    return <button onClick={() => { setPage(idx + 1) }}>{idx + 1}</button>
+    return <button onClick={() => {
+      if (page !== idx + 1)
+        setPage(idx + 1)
+
+    }}>{idx + 1}</button>
   })
 }
 
@@ -316,7 +327,10 @@ const App = () => {
           }}>⏮️</button>
           {
             [...Array(Math.ceil(products.length / 10))].map((item, idx) => {
-              return <button onClick={() => { setPage(idx + 1) }}>{idx + 1}</button>
+              return <button onClick={() => {
+                if (page !== idx + 1)
+                  setPage(idx + 1)
+              }}>{idx + 1}</button>
             })
           }
           <button disabled={page == Math.ceil(products.length / 10)} onClick={() => {

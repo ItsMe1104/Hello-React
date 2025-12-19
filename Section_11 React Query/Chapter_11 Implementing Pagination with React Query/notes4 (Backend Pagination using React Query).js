@@ -9,12 +9,26 @@
 
 //??! Important points :-
 //? i) Since all the variables that we destructure from useQuery() are inbuilt State variables
-// --> Hence, remove the State variable for storing API data
+// --> Hence, remove all the State variable for storing API data
+// --> Only the "page" State variable will be present
 
 
 //? ii) Since, we will fetch the API data every time our page changes
 // --> Pass the "page" State variable in the queryKey
 queryKey: ["products", page]
+
+
+
+//!(Creating the URL with correct limit & offset values)
+
+//? offset/skip :- starting index
+// page * limit - limit
+
+//? limit = limit
+
+const URL = `https://dummyjson.com/products?limit=10&skip=${page * limit - limit}`
+
+
 
 
 //? ii) Since the API data return an object and inside that the products array and total (for total records)
@@ -23,11 +37,11 @@ queryKey: ["products", page]
 
 {
   const { data: products, isLoading, error } = useQuery({
-    queryKey: ["products"],
+    queryKey: ["products", page],
     queryFn: async () => {
-      const res = await axios.get("https://dummyjson.com/products/?limit=66")
+      const res = await axios.get(`https://dummyjson.com/products?limit=10&skip=${page * 10 - 10}`)
       const data = res.data;
-      return data    // instead of returning just data
+      return data;    // instead of returning just data
     }
   })
 
@@ -60,8 +74,8 @@ Math.ceil(data.total / 10)        // crash
   const { data = { products: [], total: 0 }, isLoading, error } = useQuery({
     queryKey: ["products"],
     queryFn: async () => {
-      const res = await axios.get("https://dummyjson.com/products/?limit=66")
-      return res.data.products;
+      const res = await axios.get(`https://dummyjson.com/products?limit=10&skip=${page * 10 - 10}`)
+      return res.data;
     }
   })
 }
@@ -80,9 +94,84 @@ return (
 )
 
 
-//! The rest of the code remains same like in previous notes
-// notes1 (Backend Pagination using Normal React).js
+//?? iv) Since we don't want our current page to again fetch the API and render again if we click on the same button
+// --> Hence put a check on the button click handlers to only fetch and render when the button no. != currentPage
 
+if (page !== idx + 1)
+  setPage(idx + 1);
+
+
+// E.g :-
+[...Array(Math.ceil(data.products.length / 10))].map((item, idx) => {
+  return <button key={idx + 1} onClick={() => {
+    if (page !== idx + 1) setPage(idx + 1)
+  }}>{idx + 1}</button>
+})
+
+
+//?? NOTE :-
+// --> Since, we are extracting data directly
+// --> Wherever we are using products and total, use data.products & data.total
+
+
+//! The rest of the code remains same like in previous notes
+// notes3 (Backend Pagination using Normal React).js
 
 
 //********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************** */
+
+
+//? Whole Code :-
+
+
+const App = () => {
+
+  const [page, setPage] = useState(1);
+
+
+  const { data = { products: [], total: 0 }, isLoading, error } = useQuery({
+    queryKey: ["products", page],
+    queryFn: async () => {
+      const res = await axios.get(`https://dummyjson.com/products?limit=10&skip=${page * 10 - 10}`)
+      const data = res.data;
+      return data;
+    }
+  })
+
+
+  return (
+    <>
+
+      {
+        data.products?.length > 0 && <div className="products-container">
+          {
+            data.products.map((item) => {
+              return <span key={item.id}>
+                <img src={item.thumbnail} alt={item.title} />
+                <span>{item.title}</span>
+              </span>
+            })
+          }
+        </div>
+      }
+
+      <div className="pagination-container">
+        <button disabled={page == 1} onClick={() => {
+          setPage(page - 1)
+        }}>⏮️</button>
+        {
+          [...Array(Math.ceil(data.total / 10))].map((item, idx) => {
+            return <button key={idx + 1} onClick={() => {
+              if (page !== idx + 1)
+                setPage(idx + 1)
+            }}>{idx + 1}</button>
+          })
+        }
+        <button disabled={page == Math.ceil(data.total / 10)} onClick={() => {
+          setPage(page + 1)
+        }}>⏭️</button>
+      </div>
+
+    </>
+  )
+}

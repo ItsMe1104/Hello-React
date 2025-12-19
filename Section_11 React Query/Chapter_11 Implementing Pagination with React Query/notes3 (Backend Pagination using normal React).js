@@ -1,4 +1,4 @@
-//?? Backend Pagination :-
+//?? 1) Backend Pagination :-
 
 // --> Here the Backend will let us know three things :-
 // a) limit :- how many no. of products per page
@@ -101,7 +101,7 @@ const URL = `https://dummyjson.com/products?limit=10&skip=${page * limit - limit
 {
   // Fetching API whenever the page changes
   const fetchAPI = async () => {
-    const res = await fetch("https://dummyjson.com/products?limit=10&skip=7");
+    const res = await fetch(`https://dummyjson.com/products?limit=10&skip=${page * 10 - 10}`);
     const data = await res.json();
     setProducts(data.products);
     setTotal(data.total);
@@ -202,12 +202,27 @@ products.length > 0 && <div className="pagination"></div>
 // --> Add the onClick handlers to every generated button
 // --> Such that when clicked, we will change the page State to that button's no.   (index+1)
 
+//? NOTE:-
+// --> Make sure that the page is updated only when the button we are clicking != current page
+// --> Hence, there is no point of fetching & rendering again
+
+if (page !== idx + 1)
+  setPage(idx + 1);
+
+
+// E.g :-
 {
   [...Array(Math.ceil(total / 10))].map((item, idx) => {
-    return <button onClick={() => { setPage(idx + 1) }}>{idx + 1}</button>
+    return <button onClick={() => {
+      if (page !== idx + 1)
+        setPage(idx + 1)
+    }}>{idx + 1}</button>
   })
 }
+
 // --> Once the page is updated, again the API call will be made and products will be updated
+
+
 
 
 
@@ -305,8 +320,6 @@ products.length > 0 && <div className="pagination"></div>
 
 
 
-
-
 //************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************** */
 
 
@@ -351,7 +364,10 @@ const App = () => {
           }}>⏮️</button>
           {
             [...Array(Math.ceil(total / 10))].map((_, idx) => {
-              return <button onClick={() => { setPage(idx + 1) }}>{idx + 1}</button>
+              return <button onClick={() => {
+                if (page !== idx + 1)
+                  setPage(idx + 1)
+              }}>{idx + 1}</button>
             })
           }
           <button disabled={page == Math.ceil(total / 10)} onClick={() => {

@@ -7,7 +7,9 @@
 
 //??! Important points :-
 //? i) Since all the variables that we destructure from useQuery() are inbuilt State variables
-// --> Hence, remove the State variable for storing API data
+// --> Hence, remove all the State variable for storing API data
+// --> Only the "page" State variable will be present
+
 
 //? ii) Since the API data return an object and inside that the products array
 // --> Hence, for directly storing the array inside the State variable
@@ -55,8 +57,26 @@ Math.ceil(products.length / 10)
 }
 
 
+
+//?? iv) Since we don't want our current page to again fetch the API and render again if we click on the same button
+// --> Hence put a check on the button click handlers to only fetch and render when the button no. != currentPage
+
+if (page !== idx + 1)
+  setPage(idx + 1);
+
+
+// E.g :-
+[...Array(Math.ceil(products.length / 10))].map((item, idx) => {
+  return <button key={idx + 1} onClick={() => {
+    if (page !== idx + 1) setPage(idx + 1)
+  }}>{idx + 1}</button>
+})
+
+
+
 //! The rest of the code remains same like in previous notes
 // notes1 (Frontend Pagination using Normal React).js
+
 
 
 //********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************** */
@@ -101,7 +121,10 @@ const App = () => {
         }}>⏮️</button>
         {
           [...Array(Math.ceil(products.length / 10))].map((item, idx) => {
-            return <button key={idx + 1} onClick={() => { setPage(idx + 1) }}>{idx + 1}</button>
+            return <button key={idx + 1} onClick={() => {
+              if (page !== idx + 1)
+                setPage(idx + 1)
+            }}>{idx + 1}</button>
           })
         }
         <button disabled={page == Math.ceil(products.length / 10)} onClick={() => {
