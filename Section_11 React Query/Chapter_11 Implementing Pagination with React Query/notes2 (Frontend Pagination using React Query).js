@@ -73,6 +73,29 @@ if (page !== idx + 1)
 })
 
 
+//! Important Optimization only for React Query (Using "placeholderData" to stop the sudden disappearance of items):-
+
+// --> When the API call is made for new set of items
+// --> The old set of items suddenly disappear, making the pagination buttons to climb up till new items are loaded
+
+//?? Solution 
+// --> Pass the property "placeHolderData" 
+// --> For the value :- pass a callback and return its parameter
+// --> Hence, till the new set of items are fetched and rendered, the old items will remain visible on the UI
+
+{
+  {
+    const { data: products = [], isLoading, error } = useQuery({
+      queryKey: ["products"],
+      queryFn: async () => {
+        const res = await axios.get("https://dummyjson.com/products/?limit=66")
+        return res.data.products;
+      },
+      placeholderData: (previousData) => previousData
+    })
+  }
+}
+
 
 //! The rest of the code remains same like in previous notes
 // notes1 (Frontend Pagination using Normal React).js
@@ -96,7 +119,8 @@ const App = () => {
       console.log(data.products);
 
       return data.products;
-    }
+    },
+    placeholderData: (previousData) => previousData
   })
 
   return (
@@ -121,7 +145,7 @@ const App = () => {
         }}>⏮️</button>
         {
           [...Array(Math.ceil(products.length / 10))].map((item, idx) => {
-            return <button key={idx + 1} onClick={() => {
+            return <button key={idx + 1} style={{ fontWeight: page === idx + 1 ? "bold" : "normal" }} onClick={() => {
               if (page !== idx + 1)
                 setPage(idx + 1)
             }}>{idx + 1}</button>

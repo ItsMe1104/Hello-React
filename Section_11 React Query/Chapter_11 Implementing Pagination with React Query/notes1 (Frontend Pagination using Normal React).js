@@ -199,6 +199,25 @@ if (page !== idx + 1)
 //! Step 7 (Highlight the current page button):-
 // --> The user should get a glimpse of the current page through the no. buttons
 // --> Whichever button no. matches the current page, highlight it
+
+
+//?? Option 1 (Using fontWeight style):-
+// While creating the buttons, give an inline style for font-weight
+// --> Inside that give a condition such that if button no. is matching the current page
+// --> If YES, then , else make the font as bold else normal
+
+
+{
+  [...Array(Math.ceil(products.length / 10)).map((_, idx) => {
+    return <button style={{ fontWeight: page === idx + 1 ? "bold" : "normal" }} onClick={() => {
+      setCurrentPage(idx + 1)
+    }} key={idx}>{idx + 1}</button>
+  })]
+}
+
+
+
+//?? Option 2 (Using CLassName) :-
 // --> While creating the buttons, check if their no. is matching the current page inside the className
 // --> If YES, then add a class "current", else don't add
 // --> Style the elements with class "current" with a different background color.
@@ -327,7 +346,7 @@ const App = () => {
           }}>⏮️</button>
           {
             [...Array(Math.ceil(products.length / 10))].map((item, idx) => {
-              return <button onClick={() => {
+              return <button style={{ fontWeight: page === idx + 1 ? "bold" : "normal" }} onClick={() => {
                 if (page !== idx + 1)
                   setPage(idx + 1)
               }}>{idx + 1}</button>

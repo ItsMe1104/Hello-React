@@ -81,7 +81,8 @@ Math.ceil(data.total / 10)        // crash
 }
 
 
-//?? Solution 3 (Saving initial render via Loader):-
+
+//?? Solution 3 (Saving initial render crash via Loader):-
 // --> Render only Loader through isLoading variable on initial render, when the State variable for "data" is undefined
 // --> Later when the data variable is updated with API data
 // --> The Loader will automatically get off
@@ -94,6 +95,29 @@ return (
 )
 
 
+//! Important Optimization only for React Query (Using "placeholderData" to stop the sudden disappearance of items):-
+
+// --> When the API call is made for new set of items
+// --> The old set of items suddenly disappear, making the pagination buttons to climb up till new items are loaded
+
+//?? Solution 
+// --> Pass the property "placeHolderData" 
+// --> For the value :- pass a callback and return its parameter
+// --> Hence, till the new set of items are fetched and rendered, the old items will remain visible on the UI
+
+{
+  const { data = { products: [], total: 0 }, isLoading, error } = useQuery({
+    queryKey: ["products"],
+    queryFn: async () => {
+      const res = await axios.get(`https://dummyjson.com/products?limit=10&skip=${page * 10 - 10}`)
+      return res.data;
+    },
+    placeholderData: (previousData) => previousData
+  })
+}
+
+
+
 //?? iv) Since we don't want our current page to again fetch the API and render again if we click on the same button
 // --> Hence put a check on the button click handlers to only fetch and render when the button no. != currentPage
 
@@ -103,7 +127,7 @@ if (page !== idx + 1)
 
 // E.g :-
 [...Array(Math.ceil(data.products.length / 10))].map((item, idx) => {
-  return <button key={idx + 1} onClick={() => {
+  return <button key={idx + 1} style={{ fontWeight: page === idx + 1 ? "bold" : "normal" }} onClick={() => {
     if (page !== idx + 1) setPage(idx + 1)
   }}>{idx + 1}</button>
 })
@@ -135,7 +159,8 @@ const App = () => {
       const res = await axios.get(`https://dummyjson.com/products?limit=10&skip=${page * 10 - 10}`)
       const data = res.data;
       return data;
-    }
+    },
+    placeholderData: (previousData) => previousData
   })
 
 
@@ -161,7 +186,7 @@ const App = () => {
         }}>⏮️</button>
         {
           [...Array(Math.ceil(data.total / 10))].map((item, idx) => {
-            return <button key={idx + 1} onClick={() => {
+            return <button key={idx + 1} style={{ fontWeight: page === idx + 1 ? "bold" : "normal" }} onClick={() => {
               if (page !== idx + 1)
                 setPage(idx + 1)
             }}>{idx + 1}</button>
