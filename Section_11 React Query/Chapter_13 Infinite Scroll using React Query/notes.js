@@ -12,3 +12,6 @@
 // --> App fetches the next set of items
 // --> New items are appended, not replaced
 // --> Repeat until no more data
+
+
+//! React Query has a dedicated inbuilt hook to implement Infinite scroll
